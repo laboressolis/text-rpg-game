@@ -1,4 +1,4 @@
-from basic_functions import typing, fasttyping, clear_screen, speechbreak
+from basic_functions import typing, fasttyping, clear_screen, speechbreak, newline
 import time
 
 start_logo = r'''
@@ -22,14 +22,15 @@ def start():
     speechbreak()
     fasttyping("You arive at Celestria's main gate, the biggest city in Eldoria. \n")
     fasttyping("You head towards the Adventurer's Guild in city center where you meet Oberon.\n")
+    
     typing("Oberon: You look new here son! What bring you here? Looking for some sweet money? \n")
     typing("You: No, I'm just an Adventurer. \n")
-    typing("Oberon: Ohhh... So you're one of those kind, huh? \n")
-    typing("Oberon: Well to buy anything here at the guild you'd a guild emblem, you register there at the counter. \n")
-    typing("Oberon: This old man sells a lot of things. \n")
-    typing(' ')
-    fasttyping("You head over to the counter to register.")
+    typing("Oberon: Ohhh... So you're one of those kind, huh? But you seem empty handed...... \n")
+    typing("You: I was ambused on my way and lost my stuff. \n")
+    typing("Well I suppose I could hook you with some stuff. Follow me!")
     clear_screen()
+    fasttyping("You follow Oberon to the guild's armory. \n")
+
     # begin character creation
 
 start()

@@ -32,3 +32,6 @@ def speechbreak():
 def createcharacter():
     pass
 
+
+def newline():
+    print()
