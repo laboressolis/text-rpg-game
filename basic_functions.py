@@ -3,6 +3,8 @@ import sys
 import time
 import random
 import msvcrt
+from enemy_class import Enemy
+
 
 def clear_screen():
     '''Clears The Screen'''
@@ -28,6 +30,22 @@ def fasttyping(message):
 def speechbreak():
     print("Press any key to continue....", end='')
     msvcrt.getch()
+
+def load_enemies(filename):
+    enemies = []
+    with open(filename, 'r') as file:
+        for line in file:
+            name, health, attack, defense = line.strip().split(',')
+            enemies.append(Enemy(name,int(health), int(attack), int(defense)))
+        return enemies
+    
+def load_items(filename):
+    items = {}
+    with open(filename, 'r') as file:
+        for line in file:
+            item_id, item_name = line.strip().split(',')
+            items[int(item_id)] = item_name
+    return items
 
 def createcharacter():
     pass
