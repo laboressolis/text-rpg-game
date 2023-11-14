@@ -1,4 +1,5 @@
 from basic_functions import typing, fasttyping, clear_screen, speechbreak, newline
+from basic_functions import load_enemies, load_items
 import time
 
 start_logo = r'''
@@ -11,8 +12,11 @@ start_logo = r'''
 █▄▄▄▄▄▄▄█▄▄█ █▄▄█▄█ █▄▄█▄▄▄▄▄▄██▄▄▄▄▄▄▄█▄▄█ █▄▄█▄▄▄▄▄▄▄█  █▄▄▄▄▄▄▄█▄▄▄█      █▄▄▄▄▄▄▄█▄▄▄▄▄▄▄█▄▄▄▄▄▄██▄▄▄▄▄▄▄█▄▄▄█  █▄█▄▄▄█▄█ █▄▄█
 
 '''
+enemies = load_enemies("enemies.txt")
+items = load_items("items.txt")
 
 def start():
+    
     clear_screen()
     print(start_logo)
     time.sleep(.5)
