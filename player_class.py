@@ -36,7 +36,21 @@ class Player:
         # How to distinguish b/w weapon and equips??
         # NEW TEMPLATE
         # {EQUIPID: {id: value, type: string, name: string, attack: value, defense: value, class: string}}
-        self.equipment_inventory = {1:{'id': 1, 'type': 'weapon', 'name': 'Excalibur','attack': 20, 'defense': 0, 'class': 'physical'}}
+        self.equipment_inventory = {1:{'id': 1, 'type': 'weapon', 'name': 'Excalibur','attack': 20, 'defense': 10, 'class': 'physical'}}
+    def add_stamina(self, value):
+        return min(self.stamina + value, self.max_stamina)
+
+    def add_mana(self, value):
+        return min(self.mana + value, self.max_mana)
+
+    def add_hp(self, value):
+        return min(self.health + value, self.max_health)
+    
+    def add_defense(self,value):
+        return min(self.defense + value, self.max_defense)
+    
+    def add_attack(self, value):
+        return self.base_attack + value
 
     def player_status(self):
         print(f"\n{'*' * 30}")
@@ -58,7 +72,10 @@ class Player:
         
         print("\nEquipment:")
         for slot, item in self.equipment.items():
-            print(f"  {slot.capitalize()}: {item}")
+            if item is None:
+                print(f"  {slot.capitalize()}: {item}")
+            else:
+                print(f"  {slot.capitalize()}: {item['name']} | Attack:{item['attack']} | Defense:{item['defense']}")
         
         print(f"\n{'*' * 30}\n")
 
@@ -74,6 +91,33 @@ class Player:
         print("Potion Inventory:")
         for i, (item, quantity) in enumerate(self.potion_inventory.items(), 1):
             print(f"{i}. {item} ({quantity})")
+    
+    def equip(self, id):
+        if id in self.equipment_inventory:
+            if self.equipment_inventory[id]['class'] == self.player_class:
+                weapon = self.equipment_inventory[id]
+                # to remove the item from inventory if the equipment slot is empty
+                if self.equipment[weapon['type']] is None:
+                    self.equipment[weapon['type']] = weapon
+                    self.base_attack = self.add_attack(weapon['attack'])
+                    self.defense = self.add_defense(weapon['defense'])
+                    del self.equipment_inventory[id]
+                else:
+                    pass
+                    # Add stuff to swap
+                
 
-# player = Player('icy','physical',50,50,50,20)
+
+                
+
+
+player = Player('icy','physical',50,50,100,20)
+player.defense = 100
+player.player_status()
+print("^"*20)
+player.equip(1)
+player.player_status()
+print("^"*20)
+player.display_equipment_inventory()
+print("^"*20)
 
