@@ -1,96 +1,41 @@
 import random
+import os
 
 class Player:
-    def __init__(self, name, health, attack, defense, mana, stamina):
+    def __init__(self, name, player_class, max_stamina, max_mana, max_defense, base_attack):
         self.name = name
-        self.health = health
-        self.attack = attack
-        self.defense = defense
-        self.mana = mana
-        self.stamina = stamina
-        self.inventory = {"Health Potion": 0, "Mana Potion": 0, "Stamina Potion": 0, "Defense Potion": 0}
+        self.player_class = player_class
+        self.player_subclass = None
+        self.level = 1
+        self.skill_points = 0
+        self.coin = 0
+        self.equipment = {'weapon': None, 'head': None, 'chest': None, 'pants': None, 'boots': None, 'hands': None}
 
-    def regenerate(self):
-        self.mana += 10
-        self.stamina += 15
-    def use_item(self,item_name):
-        if self.inventory[item_name] > 0:
-            self.inventory[item_name] -= 1
-            return True
-        else:
-            print(f"You don't have any {item_name}.\n")
-            return False
-        
-def print_character_status(character):
-    print(f"{character.name} - Health: {character.health}, Mana: {character.mana}, Stamina: {character.stamina}")
-    
-def player_attack(player, enemy):
-    print("Choose Your Attack:")
-    print("1. Physical Attack: ")
-    print("2. Magical Attack: ")
+        # Stats
+        self.base_attack = base_attack
 
-    attack_choice = input("Enter your choice (1 or 2): ")
-    if attack_choice == "1":
-        if player.stamina >= 10:  
-            player.stamina -= 10
-            return random.randint(player.attack - 5, player.attack + 5)
-        else:
-            print("Not enough stamina for a physical attack!")
-            return 0  
-    elif attack_choice == "2":
-        if player.mana >= 20:  
-            player.mana -= 20
-            return random.randint(player.attack - 3, player.attack + 7)
-        else:
-            print("Not enough mana for a magical attack!")
-            return 0  
-    else:
-        print("Invalid choice. Performing a default physical attack.")
-        return random.randint(player.attack - 5, player.attack + 5)
-    
+        self.max_health = 100
+        self.health = self.max_health
 
-def perform_item_effect(player, item_name):
-    if item_name == 'Health Potion':
-        player.health += 20
-    if item_name == 'Mana Potion':
-        player.mana += 30
-    elif item_name == "Stamina Potion":
-        player.stamina += 40
-    elif item_name == "Defense Potion":
-        player.defense += 5
+        self.max_stamina = max_stamina
+        self.stamina = self.max_stamina
 
-def perform_player_defense(player):
-    # Placeholder function for player defense logic
-    print("You defend and regain stamina and mana.")
-    player.stamina += 10
-    player.mana += 15
+        self.max_mana = max_mana
+        self.mana = self.max_mana
 
-def flee():
-    # Placeholder function for player run logic
-    if random.random() < 0.3:  # 30% chance to trip and fail to flee
-        print("You tripped and failed to flee!")
-        return False
-    else:
-        print("You successfully fled!")
-        return True
-    
-def use_inventory(player):
-    print("Inventory:")
-    for i, (item, quantity) in enumerate(player.inventory.items(), 1):
-        print(f"{i}. {item} ({quantity})")
+        self.max_defense = max_defense
+        self.defense = self.max_defense
 
-    choice = input("Enter the item number to use, or 0 to cancel: ")
-    if choice == "0":
-        return
+        # Inventory
+        # Potion template {Type:count}
+        self.potion_inventory = {'health_potion': 3, 'mana_potion': 2, 'defense_potion': 1}
+        # Equipment template {EQUIPID:{type:value,name:name,attack:value,defense:value,class:value}}
+        # How to distinguish b/w weapon and equips??
+        # NEW TEMPLATE
+        # {EQUIPID: {id: value, type: string, name: string, attack: value, defense: value, class: string}}
+        self.equipment_inventory = {1:{'id': 1, 'type': 'weapon', 'name': 'Excalibur','attack': 20, 'defense': 0, 'class': 'physical'}}
 
-    try:
-        item_index = int(choice) - 1
-        selected_item = list(player.inventory.keys())[item_index]
-        if selected_item in ["Health Potion", "Mana Potion", "Stamina Potion", "Defense Potion"]:
-            player.use_item(selected_item)
-            perform_item_effect(player, selected_item)
-        else:
-            print("Invalid choice!")
-    except (ValueError, IndexError):
-        print("Invalid choice!")
-
+        def display_equipment_inventory(self):
+            print("Inventory:")
+            for equipment_id, equipment in self.equipment_inventory.items():
+                print(f"{equipment_id}: {equipment['name']} - Type: {equipment['type']}, Attack: {equipment['attack']}, Defense: {equipment['defense']}, Class: {equipment['class']}")

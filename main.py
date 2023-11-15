@@ -34,6 +34,7 @@ def start():
     typing("Oberon: Well I suppose I could hook you with some stuff. Follow me!")
     clear_screen()
     fasttyping("You follow Oberon to the guild's armory. \n")
+    
 
     # begin character creation
 
