@@ -79,8 +79,6 @@ class Player:
         
         print(f"\n{'*' * 30}\n")
 
-    def display_player_status(self):
-        print(f"")
 
     def display_equipment_inventory(self):
         print("Equipment Inventory:")
@@ -95,22 +93,33 @@ class Player:
     def equip(self, id):
         if id in self.equipment_inventory:
             if self.equipment_inventory[id]['class'] == self.player_class:
-                weapon = self.equipment_inventory[id]
+                equip = self.equipment_inventory[id]
                 # to remove the item from inventory if the equipment slot is empty
-                if self.equipment[weapon['type']] is None:
-                    self.equipment[weapon['type']] = weapon
-                    self.base_attack = self.add_attack(weapon['attack'])
-                    self.defense = self.add_defense(weapon['defense'])
+                if self.equipment[equip['type']] is None:
+                    self.equipment[equip['type']] = equip
+                    self.base_attack = self.add_attack(equip['attack'])
+                    self.defense = self.add_defense(equip['defense'])
                     del self.equipment_inventory[id]
+                    print(f"You have equipped {equip['name']}.")
+                # messed up equipment swapper
                 else:
-                    pass
-                    # Add stuff to swap equips
-                
+                    temp_equip = self.equipment[equip['type']]
+                    self.equipment[equip['type']] = equip
+                    self.base_attack = self.add_attack(equip['attack'])
+                    self.defense = self.add_defense(equip['defense'])
+                    del self.equipment_inventory[id]
+                    # THIS STUFF RIGHT HERE
+                    self.equipment_inventory[temp_equip['id']] = temp_equip
+                    print(f"You have swapped {temp_equip['name']} with {equip['name']}.")
+            else:
+                print("You can not equip this due to class restriction.")
+        else:
+            print("You don't have that item in your inventory.")
 
 
                 
 
 
-#player = Player('icy','physical',50,50,100,20)
+player = Player('icy','physical',50,50,100,20)
 
 
