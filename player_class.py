@@ -36,6 +36,15 @@ class Player:
         self.equipment_inventory = {1:{'id': 1, 'type': 'weapon', 'name': 'Excalibur','attack': 20, 'defense': 0, 'class': 'physical'}}
 
         def display_equipment_inventory(self):
-            print("Inventory:")
+            print("Equipment Inventory:")
             for equipment_id, equipment in self.equipment_inventory.items():
                 print(f"{equipment_id}: {equipment['name']} - Type: {equipment['type']}, Attack: {equipment['attack']}, Defense: {equipment['defense']}, Class: {equipment['class']}")
+
+        def display_potion_inventory(self):
+            print("Potion Inventory:")
+            for i, (item, quantity) in enumerate(self.inventory.items(), 1):
+                print(f"{i}. {item} ({quantity})")
+
+player = Player('icy','physical',50,50,50,20)
+
+player.display_equipment_inventory()
