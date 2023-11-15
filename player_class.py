@@ -104,20 +104,13 @@ class Player:
                     del self.equipment_inventory[id]
                 else:
                     pass
-                    # Add stuff to swap
+                    # Add stuff to swap equips
                 
 
 
                 
 
 
-player = Player('icy','physical',50,50,100,20)
-player.defense = 100
-player.player_status()
-print("^"*20)
-player.equip(1)
-player.player_status()
-print("^"*20)
-player.display_equipment_inventory()
-print("^"*20)
+#player = Player('icy','physical',50,50,100,20)
+
 
