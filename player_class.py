@@ -31,7 +31,7 @@ class Player:
 
         # Inventory
         # Potion template {Type:count}
-        self.potion_inventory = {'health_potion': 3, 'mana_potion': 2, 'defense_potion': 1}
+        self.potion_inventory = {'Health Potion(+20)': 3, 'Mana Potion(+30)': 2, 'Stamina Potion(+30)': 1}
         # Equipment template {EQUIPID:{type:value,name:name,attack:value,defense:value,class:value}}
         # How to distinguish b/w weapon and equips??
         # NEW TEMPLATE
@@ -79,7 +79,6 @@ class Player:
         
         print(f"\n{'*' * 30}\n")
 
-
     def display_equipment_inventory(self):
         print("Equipment Inventory:")
         for equipment_id, equipment in self.equipment_inventory.items():
@@ -116,10 +115,81 @@ class Player:
         else:
             print("You don't have that item in your inventory.")
 
+    def use_potion(self, ch):
+        if ch == '1':
+            if self.potion_inventory['Health Potion(+20)'] != 0:
+                self.add_hp(20)
+                self.potion_inventory['Health Potion(+20)'] -= 1
+                print("You have gained 20 hp pts.")
+            else:
+                print("You have 0 Health Potions.")
+        if ch == '2':
+            if self.potion_inventory['Mana Potion(+30)'] != 0:
+                self.add_mana(30)
+                self.potion_inventory['Mana Potion(+30)'] -= 1
+                print("You have gained 30 mana pts.")
+            else:
+                print("You have 0 Mana Potions.")
+        if ch == '3':
+            if self.potion_inventory['Stamina Potion(+30)'] != 0:
+                self.add_mana(30)
+                self.potion_inventory['Stamina Potion(+30)'] -= 1
+                print("You have gained 30 stamina pts.")
+            else:
+                print("You have 0 Stamina Potions.")
 
-                
+    def show_inventory(self):
+        ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
+        while ch not in ['1','2','0']:
+            print("Wrong choice...")
+            ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
+        if ch == '1':
+            self.display_potion_inventory(self)
+            ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
+            while ch not in ['1','2','3','0']:
+                print("Wrong choice...")
+                ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
+            if ch == '0':
+                return
+            else:
+                self.use_potion(self, ch)
+        if ch == '2':
+            self.display_equipment_inventory(self)
+            ch = input("Input Equipment ID to Equip | (0)Exit: ")
+            if ch=='0':
+                return
+            else:
+                self.equip(self,ch)
+        if ch == '3':
+            return
+    def show_inventory1(self):
+        ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
+        while ch not in ['1', '2', '0']:
+            print("Wrong choice...")
+            ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
 
+        if ch == '1':
+            self.display_potion_inventory()
+            ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
+            while ch not in ['1', '2', '3', '0']:
+                print("Wrong choice...")
+                ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
+            if ch == '0':
+                return
+            else:
+                self.use_potion(ch)
 
-player = Player('icy','physical',50,50,100,20)
+        elif ch == '2':
+            self.display_equipment_inventory()
+            ch = input("Input Equipment ID to Equip | (0)Exit: ")
+            if ch == '0':
+                return
+            else:
+                self.equip(ch)
 
+        elif ch == '0':
+            return
+        else:
+            print("Wrong choice...")
 
+# Define the missing methods display_potion_inventory, use_potion, display_equipment_inventory, and equip in your class.
