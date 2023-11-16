@@ -2,7 +2,7 @@ import random
 import os
 
 class Player:
-    def __init__(self, name, player_class, max_stamina, max_mana, max_defense, base_attack):
+    def __init__(self, name, player_class, max_stamina, max_mana, base_attack):
         self.name = name
         self.player_class = player_class
         self.player_subclass = None
@@ -12,7 +12,8 @@ class Player:
         self.equipment = {'weapon': None, 'head': None, 'chest': None, 'pants': None, 'boots': None, 'hands': None}
 
         # Stats
-        self.base_attack = base_attack
+        self.base_attack = base_attack 
+        self.defense = 10
 
         self.max_health = 100
         self.health = self.max_health
@@ -26,8 +27,7 @@ class Player:
         self.mana = self.max_mana
         self.mana_regen = 10
         
-        self.max_defense = max_defense
-        self.defense = self.max_defense
+        
 
         # Inventory
         # Potion template {Type:count}
@@ -36,21 +36,48 @@ class Player:
         # How to distinguish b/w weapon and equips??
         # NEW TEMPLATE
         # {EQUIPID: {id: value, type: string, name: string, attack: value, defense: value, class: string}}
-        self.equipment_inventory = {1:{'id': 1, 'type': 'weapon', 'name': 'Excalibur','attack': 20, 'defense': 10, 'class': 'physical'}}
+        self.equipment_inventory = {'1':{'id': '1', 'type': 'weapon', 'name': 'Excalibur','attack': 50, 'defense': 10, 'class': 'physical'},
+                                    '2':{'id': '2', 'type': 'weapon', 'name': 'Flame Sword','attack': 30, 'defense': 10, 'class': 'physical'},
+                                    '3':{'id': '3', 'type': 'weapon', 'name': 'Icy Sword','attack': 10, 'defense': 10, 'class': 'physical'}
+                                    }
+    def add_hp(self, value):
+        self.health = min(self.health + value, self.max_health)
+    
     def add_stamina(self, value):
-        return min(self.stamina + value, self.max_stamina)
+        self.stamina =  min(self.stamina + value, self.max_stamina)
 
     def add_mana(self, value):
-        return min(self.mana + value, self.max_mana)
-
-    def add_hp(self, value):
-        return min(self.health + value, self.max_health)
+        self.mana =  min(self.mana + value, self.max_mana)
     
     def add_defense(self,value):
-        return min(self.defense + value, self.max_defense)
+        self.defense = self.defense + value
     
     def add_attack(self, value):
-        return self.base_attack + value
+        self.base_attack = self.base_attack + value
+    
+    def remove_health(self, value):
+        self.health = max(self.health - value, 0)
+        if self.health == 0:
+            # Add Game over sequence hhere
+            pass
+
+    def remove_stamina(self, value):
+        self.stamina = max(self.stamina - value, 0)
+        if self.stamina == 0:
+            print("You are exhuasted, You lose 10 hp.")
+            self.remove_health(10)
+            
+    def remove_mana(self,value):
+        self.mana = max(self.mana - value, 0)
+
+    def remove_defense(self,value):
+        self.defense = max(self.defense - value,0)
+    
+    def remove_attack(self,value):
+        self.base_attack = self.base_attack - value
+        if self.base_attack < 0:
+            print("HOW YOU SO WEAK? PATHETIC LMAO")
+            print("*cries in asian*")   
 
     def player_status(self):
         print(f"\n{'*' * 30}")
@@ -64,9 +91,9 @@ class Player:
         print(f"Health: {self.health}/{self.max_health} (+{self.health_regen} regen)")
         print(f"Stamina: {self.stamina}/{self.max_stamina} (+{self.stamina_regen} regen)")
         print(f"Mana: {self.mana}/{self.max_mana} (+{self.mana_regen} regen)")
-        print(f"Defense: {self.defense}/{self.max_defense}")
+        print(f"Defense: {self.defense}")
+        print(f"Attack: {self.base_attack}")
         print(f"{'-' * 30}")
-        print(f"Base Attack: {self.base_attack}")
         print(f"Coins: {self.coin}")
         print(f"Skill Points: {self.skill_points}")
         
@@ -96,18 +123,25 @@ class Player:
                 # to remove the item from inventory if the equipment slot is empty
                 if self.equipment[equip['type']] is None:
                     self.equipment[equip['type']] = equip
-                    self.base_attack = self.add_attack(equip['attack'])
-                    self.defense = self.add_defense(equip['defense'])
+                    # adding stats
+                    self.add_attack(equip['attack'])
+                    self.add_defense(equip['defense'])
+
                     del self.equipment_inventory[id]
                     print(f"You have equipped {equip['name']}.")
                 # messed up equipment swapper
                 else:
                     temp_equip = self.equipment[equip['type']]
+
                     self.equipment[equip['type']] = equip
-                    self.base_attack = self.add_attack(equip['attack'])
-                    self.defense = self.add_defense(equip['defense'])
+                    # removing prev stats
+                    self.remove_attack(temp_equip['attack'])
+                    self.remove_defense(temp_equip['defense'])
+
+                    self.add_attack(equip['attack'])
+                    self.add_defense(equip['defense']) 
+
                     del self.equipment_inventory[id]
-                    # THIS STUFF RIGHT HERE
                     self.equipment_inventory[temp_equip['id']] = temp_equip
                     print(f"You have swapped {temp_equip['name']} with {equip['name']}.")
             else:
@@ -140,34 +174,9 @@ class Player:
 
     def show_inventory(self):
         ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
-        while ch not in ['1','2','0']:
-            print("Wrong choice...")
-            ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
-        if ch == '1':
-            self.display_potion_inventory(self)
-            ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
-            while ch not in ['1','2','3','0']:
-                print("Wrong choice...")
-                ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
-            if ch == '0':
-                return
-            else:
-                self.use_potion(self, ch)
-        if ch == '2':
-            self.display_equipment_inventory(self)
-            ch = input("Input Equipment ID to Equip | (0)Exit: ")
-            if ch=='0':
-                return
-            else:
-                self.equip(self,ch)
-        if ch == '3':
-            return
-    def show_inventory1(self):
-        ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
         while ch not in ['1', '2', '0']:
             print("Wrong choice...")
             ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
-
         if ch == '1':
             self.display_potion_inventory()
             ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
@@ -178,7 +187,6 @@ class Player:
                 return
             else:
                 self.use_potion(ch)
-
         elif ch == '2':
             self.display_equipment_inventory()
             ch = input("Input Equipment ID to Equip | (0)Exit: ")
@@ -186,10 +194,10 @@ class Player:
                 return
             else:
                 self.equip(ch)
-
         elif ch == '0':
             return
         else:
             print("Wrong choice...")
 
-# Define the missing methods display_potion_inventory, use_potion, display_equipment_inventory, and equip in your class.
+#player = Player('icy', 'physical',50,50,50)
+
