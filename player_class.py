@@ -26,20 +26,23 @@ class Player:
         self.max_mana = max_mana
         self.mana = self.max_mana
         self.mana_regen = 10
-        
-        
-
         # Inventory
         # Potion template {Type:count}
         self.potion_inventory = {'Health Potion(+20)': 3, 'Mana Potion(+30)': 2, 'Stamina Potion(+30)': 1}
         # Equipment template {EQUIPID:{type:value,name:name,attack:value,defense:value,class:value}}
-        # How to distinguish b/w weapon and equips??
+        # How to distinguish b/w weapon and equips?? IDS!!! edit1: switched to it being "type" (weapon/head/chest/pants/boots/hands)
         # NEW TEMPLATE
         # {EQUIPID: {id: value, type: string, name: string, attack: value, defense: value, class: string}}
         self.equipment_inventory = {'1':{'id': '1', 'type': 'weapon', 'name': 'Excalibur','attack': 50, 'defense': 10, 'class': 'physical'},
-                                    '2':{'id': '2', 'type': 'weapon', 'name': 'Flame Sword','attack': 30, 'defense': 10, 'class': 'physical'},
-                                    '3':{'id': '3', 'type': 'weapon', 'name': 'Icy Sword','attack': 10, 'defense': 10, 'class': 'physical'}
+                                    '2':{'id': '2', 'type': 'weapon', 'name': 'idk what to call1','attack': 30, 'defense': 10, 'class': 'physical'},
+                                    '3':{'id': '3', 'type': 'weapon', 'name': 'idk what to call2','attack': 10, 'defense': 10, 'class': 'physical'}
                                     }
+    def is_alive(self):
+        if self.health > 0:
+            return True
+        else:
+            return False
+    
     def add_hp(self, value):
         self.health = min(self.health + value, self.max_health)
     
@@ -57,9 +60,6 @@ class Player:
     
     def remove_health(self, value):
         self.health = max(self.health - value, 0)
-        if self.health == 0:
-            # Add Game over sequence hhere
-            pass
 
     def remove_stamina(self, value):
         self.stamina = max(self.stamina - value, 0)
