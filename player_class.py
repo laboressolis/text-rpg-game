@@ -1,6 +1,3 @@
-import random
-import os
-
 class Player:
     def __init__(self, name, player_class, max_stamina, max_mana, base_attack):
         self.name = name
@@ -10,6 +7,10 @@ class Player:
         self.skill_points = 0
         self.coin = 0
         self.equipment = {'weapon': None, 'head': None, 'chest': None, 'pants': None, 'boots': None, 'hands': None}
+        
+        # template {'id': 1, 'name': 'Punch', 'attack': 5}
+        self.skills_obtained = {}
+        self.skills_selected = {}
 
         # Stats
         self.base_attack = base_attack 
