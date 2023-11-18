@@ -1,8 +1,28 @@
 class Player():
     def __init__(self):
-        self.skill_points = 0
-        self.skills_obtained = {1: {'id': 1, 'name': 'Punch', 'attack': 50, 'skillpts': 0}}
-        self.skills_selected = {}
+        self.skill_points = 500
+        self.skills_obtained = {'1': {'id': '1', 'name': 'Punch', 'attack': 50, 'skillpts': 0}}
+        self.skills_selected = {'4': {'id': '4', 'name': 'Power Strike', 'attack': 120, 'skillpts': 2}}
+        self.max_skills = 5
+
+    def select_skill(self):
+        id = input("Enter Skill ID: ")
+        if len(self.skills_selected) == self.max_skills:
+            print("You have reached the max limit of selected skills.")
+        else:
+            if id not in self.skills_selected:
+                self.skills_selected[id] = self.skills_obtained[id]
+                print(f'You have selected {self.skills_selected[id]['name']}.')
+
+            else:
+                print("You have that skill already selected.")
+    
+    def deselect_skill(self):
+        id = input("Enter Skill ID: ")
+        if len(self.skills_selected) == 0:
+            print("You have no skills selected: ")
+        else:
+            del self.skills_selected[id]
 
     def buy_skill(self):
         id = input("Enter Skill ID: ")
@@ -18,7 +38,7 @@ class Player():
         else:
             print("There is no available skill with that skill id.")
 
-    def display_skills(self):
+    def display_all_skills(self):
         def print_skills(skill_tree, page=1, skills_per_page=10):
             start_index = (page - 1) * skills_per_page
             end_index = start_index + skills_per_page
@@ -31,10 +51,10 @@ class Player():
         total_pages = len(SKILL_TREE) // 10 + (len(SKILL_TREE) % 10 > 0) # ChatGPT Thanks :thumbsup:
         while True:
             print_skills(SKILL_TREE, current_page)
-            user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (b)Buy Skill")
+            user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (b)Buy Skill: ")
             while user_input not in ['l','k','b','q']:
                 print("Wrong Input.")
-                user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (b)Buy Skill")
+                user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (b)Buy Skill: ")
             if user_input == 'l' and current_page < total_pages:
                 current_page += 1
             elif user_input == 'k' and current_page > 1:
@@ -43,6 +63,62 @@ class Player():
                 break
             elif user_input == 'b':
                 self.buy_skill()
+
+    def display_obtained_skills(self):
+        def print_skills(obtained_skills, page=1, skills_per_page=5):
+            start_index = (page - 1) * skills_per_page
+            end_index = start_index + skills_per_page
+            paged_skills = list(obtained_skills.values())[start_index:end_index]
+            print(f"=== Skill Page {page} ===")
+            for skill in paged_skills:
+                    print(f"{skill['id']}: {skill['name']} (Attack: {skill['attack']}, Skill Points: {skill['skillpts']})")
+        current_page = 1
+        total_pages = len(SKILL_TREE) // 10 + (len(SKILL_TREE) % 10 > 0)
+        while True:
+            print_skills(self.skills_obtained,current_page)
+            user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Select Skill: ")
+            while user_input not in ['l','k','s','q']:
+                user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Select Skill: ")
+            if user_input == 'l' and current_page < total_pages:
+                current_page += 1
+            elif user_input == 'k' and current_page > 1:
+                current_page -= 1
+            elif user_input == 'q':
+                break
+            elif user_input == 's':
+                self.select_skill()
+    def display_selected_skills(self):
+        # I know I made a dum move here with the len(self.skills_selected) but eh
+        if len(self.skills_selected) != 0:
+            def print_skills(obtained_skills, page=1, skills_per_page=5):
+                start_index = (page - 1) * skills_per_page
+                end_index = start_index + skills_per_page
+                paged_skills = list(obtained_skills.values())[start_index:end_index]
+                print(f"=== Skill Page {page} ===")
+                for skill in paged_skills:
+                        print(f"{skill['id']}: {skill['name']} (Attack: {skill['attack']}, Skill Points: {skill['skillpts']})")
+            current_page = 1
+            total_pages = len(SKILL_TREE) // 10 + (len(SKILL_TREE) % 10 > 0)
+            while True:
+                if len(self.skills_selected) == 0:
+                    print("You have no selected skills.")
+                    break
+                print_skills(self.skills_selected,current_page)
+                user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Deselect Skill: ")
+                while user_input not in ['l','k','s','q']:
+                    user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Deselect Skill: ")
+                if user_input == 'l' and current_page < total_pages:
+                    current_page += 1
+                elif user_input == 'k' and current_page > 1:
+                    current_page -= 1
+                elif user_input == 'q':
+                    break
+                elif user_input == 's':
+                    self.deselect_skill()
+        else:
+            print("You have no selected skills.")
+
+    
 
 SKILL_TREE = {
     '1': {'id': '1', 'name': 'Punch', 'attack': 50, 'skillpts': 0},
@@ -79,4 +155,4 @@ SKILL_TREE = {
 
 player = Player()
 
-player.display_skills()
+player.display_selected_skills()
