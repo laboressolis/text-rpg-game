@@ -31,7 +31,7 @@ def start():
     typing("You: No, I'm just an Adventurer. \n")
     typing("Oberon: Ohhh... So you're one of those kind, huh? But you seem empty handed...... \n")
     typing("You: I was ambused on my way and lost my stuff. \n")
-    typing("Oberon: Well I suppose I could hook you with some stuff. Follow me!")
+    typing("Oberon: Well I suppose I could hook you with some stuff. Follow me!\n")
     clear_screen()
     fasttyping("You follow Oberon to the guild's armory. \n")
     
