@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import time
 import random
 import msvcrt
@@ -31,25 +32,18 @@ def speechbreak():
     print("Press any key to continue....", end='')
     msvcrt.getch()
 
-def load_enemies(filename):
-    enemies = []
-    with open(filename, 'r') as file:
-        for line in file:
-            name, health, attack, defense = line.strip().split(',')
-            enemies.append(Enemy(name,int(health), int(attack), int(defense)))
-        return enemies
-    
-def load_items(filename):
-    items = {}
-    with open(filename, 'r') as file:
-        for line in file:
-            item_id, item_name = line.strip().split(',')
-            items[int(item_id)] = item_name
-    return items
+def load_items():
+    with open('items.json', 'r') as file:
+        loaded_items = json.load(file)
+        return loaded_items
+
+def load_skills():
+    with open('skill_tree.json', 'r') as file:
+        loaded_skill_tree = json.load(file)
+        return loaded_skill_tree
 
 def createcharacter():
     pass
-
 
 def newline():
     print()
