@@ -22,6 +22,7 @@ Embark on an epic journey, face formidable enemies, and shape your destiny.
 
 ## Features
 
+- **Class System:** Player Classes to enchance your gameplay.
 - **Coin System:** Earn and spend coins to enhance your character.
 - **Skill System:** Customize your abilities using skills from a JSON file (`skills.json`).
 - **Weapons:** Equip powerful weapons loaded from a JSON file (`items.json`).
