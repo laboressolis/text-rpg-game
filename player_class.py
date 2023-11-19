@@ -1,5 +1,6 @@
 from items import item, health_pot, mana_pot, stamina_pot
 from main import skills
+import random
 
 class Player:
     def __init__(self, name, player_class, max_stamina, max_mana, base_attack):
@@ -17,8 +18,17 @@ class Player:
         self.max_skills = 5
 
         # Stats
-        self.base_attack = base_attack 
+        self.base_attack = base_attack
+        self.combined_attack = (self.base_attack + 
+                                self.equipment['weapon']['attack'] + self.equipment['head']['attack'] + 
+                                self.equipment['chest']['attack'] + self.equipment['pants']['attack'] + 
+                                self.equipment['boots']['attack'] + self.equipment['hands']['attack'])
+
         self.defense = 10
+        self.combined_defense = (self.defense + 
+                                self.equipment['weapon']['defense'] + self.equipment['head']['defense'] + 
+                                self.equipment['chest']['defense'] + self.equipment['pants']['defense'] + 
+                                self.equipment['boots']['defense'] + self.equipment['hands']['defense'])
 
         self.max_health = 100
         self.health = self.max_health
@@ -48,6 +58,11 @@ class Player:
             return True
         else:
             return False
+    
+    def passive_regeneration(self):
+        self.health += 20
+        self.mana += 20
+        self.stamina += 20
     
     def add_hp(self, value):
         self.health = min(self.health + value, self.max_health)
@@ -333,6 +348,26 @@ class Player:
                     self.deselect_skill()
         else:
             print("You have no selected skills.")
+    
+    def attack(self):
+        probabilities = [0.1, 0.3, 0.4, 0.2]
+
+        range1 = int(0.1 * self.combined_attack)
+        range2 = int(0.3 * self.combined_attack)+ range1
+        range3 = int(0.4 * self.combined_attack) + range2
+
+        random_number = random.uniform(0, 1)
+
+        if random_number < probabilities[0]:
+            print("Crit!")
+            return self.combined_attack
+        elif random_number < probabilities[1]:
+            return random.randint(range1, self.combined_attack- 1)
+        elif random_number < probabilities[2]:
+            return random.randint(range2, range1- 1)
+        else:
+            return random.randint(0,range3- 1)
+        
 
     
 #player = Player('icy', 'physical',50,50,50)
