@@ -1,3 +1,6 @@
+from items import item, health_pot, mana_pot, stamina_pot
+from main import skills
+
 class Player:
     def __init__(self, name, player_class, max_stamina, max_mana, base_attack):
         self.name = name
@@ -11,6 +14,7 @@ class Player:
         # template {'id': 1, 'name': 'Punch', 'attack': 5}
         self.skills_obtained = {}
         self.skills_selected = {}
+        self.max_skills = 5
 
         # Stats
         self.base_attack = base_attack 
@@ -29,7 +33,7 @@ class Player:
         self.mana_regen = 10
         # Inventory
         # Potion template {Type:count}
-        self.potion_inventory = {'Health Potion(+20)': 3, 'Mana Potion(+30)': 2, 'Stamina Potion(+30)': 1}
+        self.potion_inventory = {health_pot: 3, mana_pot: 2, stamina_pot: 1}
         # Equipment template {EQUIPID:{type:value,name:name,attack:value,defense:value,class:value}}
         # How to distinguish b/w weapon and equips?? IDS!!! edit1: switched to it being "type" (weapon/head/chest/pants/boots/hands)
         # NEW TEMPLATE
@@ -38,6 +42,7 @@ class Player:
                                     '2':{'id': '2', 'type': 'weapon', 'name': 'idk what to call1','attack': 30, 'defense': 10, 'class': 'physical'},
                                     '3':{'id': '3', 'type': 'weapon', 'name': 'idk what to call2','attack': 10, 'defense': 10, 'class': 'physical'}
                                     }
+    
     def is_alive(self):
         if self.health > 0:
             return True
@@ -152,23 +157,23 @@ class Player:
 
     def use_potion(self, ch):
         if ch == '1':
-            if self.potion_inventory['Health Potion(+20)'] != 0:
+            if self.potion_inventory[health_pot] != 0:
                 self.add_hp(20)
-                self.potion_inventory['Health Potion(+20)'] -= 1
+                self.potion_inventory[health_pot] -= 1
                 print("You have gained 20 hp pts.")
             else:
                 print("You have 0 Health Potions.")
         if ch == '2':
-            if self.potion_inventory['Mana Potion(+30)'] != 0:
+            if self.potion_inventory[mana_pot] != 0:
                 self.add_mana(30)
-                self.potion_inventory['Mana Potion(+30)'] -= 1
+                self.potion_inventory[mana_pot] -= 1
                 print("You have gained 30 mana pts.")
             else:
                 print("You have 0 Mana Potions.")
         if ch == '3':
-            if self.potion_inventory['Stamina Potion(+30)'] != 0:
+            if self.potion_inventory[stamina_pot] != 0:
                 self.add_mana(30)
-                self.potion_inventory['Stamina Potion(+30)'] -= 1
+                self.potion_inventory[stamina_pot] -= 1
                 print("You have gained 30 stamina pts.")
             else:
                 print("You have 0 Stamina Potions.")
@@ -200,5 +205,135 @@ class Player:
         else:
             print("Wrong choice...")
 
+    def add_item(self,item):
+        if item == health_pot:
+            self.potion_inventory[health_pot] += 1
+        elif item == mana_pot:
+            self.potion_inventory[mana_pot] += 1
+        elif item == stamina_pot:
+            self.potion_inventory[stamina_pot] += 1
+        else:
+            if type(item) == dict:
+                for key in item:
+                    self.equipment_inventory[key] = item[key]
+                    print(f'''Item "{self.equipment_inventory[key]['name']}" was added to your inventory.''')
+            else:
+                print("Wrong Item Data")
+    
+    def select_skills(self):
+        id = input("Enter Skill ID: ")
+        if len(self.skills_selected) == self.max_skills:
+            print("You have reached the max limit of selected skills.")
+        else:
+            if id not in self.skills_selected:
+                self.skills_selected[id] = self.skills_obtained[id]
+                print(f'You have selected {self.skills_selected[id]['name']}.')
+
+            else:
+                print("You have that skill already selected.")
+
+    def deselect_skill(self):
+        id = input("Enter Skill ID: ")
+        if len(self.skills_selected) == 0:
+            print("You have no skills selected: ")
+        else:
+            del self.skills_selected[id]
+    
+    def buy_skill(self):
+        id = input("Enter Skill ID: ")
+        not_obtained_skills = {key: value for key, value in skills.items() if key not in self.skills_obtained} 
+        
+        if id in not_obtained_skills:
+            if self.skill_points > not_obtained_skills[id]['skillpts']:
+                self.skills_obtained[id] = not_obtained_skills[id]
+                self.skill_points = self.skill_points - self.skills_obtained[id]['skillpts']
+                print(f"You have obtained {self.skills_obtained[id]['name']}")
+            else:
+                print(f"You don't have enough skill points (Current Skills Points:{self.skill_points}) for that skill.")
+        else:
+            print("There is no available skill with that skill id.")
+
+    def display_all_skills(self):
+        def print_skills(skill_tree, page=1, skills_per_page=10):
+            start_index = (page - 1) * skills_per_page
+            end_index = start_index + skills_per_page
+            paged_skills = list(skill_tree.values())[start_index:end_index]
+            print(f"=== Skill Page {page} ===")
+            for skill in paged_skills:
+                if skill not in self.skills_obtained.values():
+                    print(f"{skill['id']}: {skill['name']} (Attack: {skill['attack']}, Skill Points: {skill['skillpts']})")
+        current_page = 1
+        total_pages = len(skills) // 10 + (len(skills) % 10 > 0) # ChatGPT Thanks :thumbsup:
+        while True:
+            print_skills(skills, current_page)
+            user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (b)Buy Skill: ")
+            while user_input not in ['l','k','b','q']:
+                print("Wrong Input.")
+                user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (b)Buy Skill: ")
+            if user_input == 'l' and current_page < total_pages:
+                current_page += 1
+            elif user_input == 'k' and current_page > 1:
+                current_page -= 1
+            elif user_input == 'q':
+                break
+            elif user_input == 'b':
+                self.buy_skill()
+ 
+    def display_obtained_skills(self):
+        def print_skills(obtained_skills, page=1, skills_per_page=5):
+            start_index = (page - 1) * skills_per_page
+            end_index = start_index + skills_per_page
+            paged_skills = list(obtained_skills.values())[start_index:end_index]
+            print(f"=== Skill Page {page} ===")
+            for skill in paged_skills:
+                    print(f"{skill['id']}: {skill['name']} (Attack: {skill['attack']}, Skill Points: {skill['skillpts']})")
+        current_page = 1
+        total_pages = len(skills) // 10 + (len(skills) % 10 > 0)
+        while True:
+            print_skills(self.skills_obtained,current_page)
+            user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Select Skill: ")
+            while user_input not in ['l','k','s','q']:
+                user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Select Skill: ")
+            if user_input == 'l' and current_page < total_pages:
+                current_page += 1
+            elif user_input == 'k' and current_page > 1:
+                current_page -= 1
+            elif user_input == 'q':
+                break
+            elif user_input == 's':
+                self.select_skill()
+
+    def display_selected_skills(self):
+        # I know I made a dum move here with the len(self.skills_selected) but eh
+        if len(self.skills_selected) != 0:
+            def print_skills(obtained_skills, page=1, skills_per_page=5):
+                start_index = (page - 1) * skills_per_page
+                end_index = start_index + skills_per_page
+                paged_skills = list(obtained_skills.values())[start_index:end_index]
+                print(f"=== Skill Page {page} ===")
+                for skill in paged_skills:
+                        print(f"{skill['id']}: {skill['name']} (Attack: {skill['attack']}, Skill Points: {skill['skillpts']})")
+            current_page = 1
+            total_pages = len(skills) // 10 + (len(skills) % 10 > 0)
+            while True:
+                if len(self.skills_selected) == 0:
+                    print("You have no selected skills.")
+                    break
+                print_skills(self.skills_selected,current_page)
+                user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Deselect Skill: ")
+                while user_input not in ['l','k','s','q']:
+                    user_input = input("(l)Next Page | (k)Previous Page | (q)Back | (s)Deselect Skill: ")
+                if user_input == 'l' and current_page < total_pages:
+                    current_page += 1
+                elif user_input == 'k' and current_page > 1:
+                    current_page -= 1
+                elif user_input == 'q':
+                    break
+                elif user_input == 's':
+                    self.deselect_skill()
+        else:
+            print("You have no selected skills.")
+
+    
 #player = Player('icy', 'physical',50,50,50)
 
