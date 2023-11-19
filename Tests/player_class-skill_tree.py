@@ -87,6 +87,7 @@ class Player():
                 break
             elif user_input == 's':
                 self.select_skill()
+    
     def display_selected_skills(self):
         # I know I made a dum move here with the len(self.skills_selected) but eh
         if len(self.skills_selected) != 0:
