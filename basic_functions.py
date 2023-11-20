@@ -7,6 +7,7 @@ import msvcrt
 from enemy_class import Enemy
 
 
+
 def clear_screen():
     '''Clears The Screen'''
     os.system('cls')
@@ -33,17 +34,35 @@ def speechbreak():
     msvcrt.getch()
 
 def load_items():
-    with open('items.json', 'r') as file:
+    with open(r'Data\items.json', 'r') as file:
         loaded_items = json.load(file)
         return loaded_items
 
-def load_skills():
-    with open('skill_tree.json', 'r') as file:
+def load_physical_skills():
+    with open(r'Data\physical_skill_tree.json', 'r') as file:
         loaded_skill_tree = json.load(file)
         return loaded_skill_tree
+    
+def load_magical_skills():
+    with open(r'Data\magical_skill_tree.json', 'r') as file:
+        loaded_skill_tree = json.load(file)
+        return loaded_skill_tree
+
+def load_enemies():
+    with open(r'Data\enemies.json', 'r') as file:
+        loaded_enemies = json.load(file)
+        enemies = [Enemy(enemy['name'], enemy['health'], enemy['max_health'],
+                         enemy['attack'], enemy['type']) for enemy in loaded_enemies]
+        return enemies
+
 
 def createcharacter():
     pass
 
 def newline():
     print()
+
+
+items = load_items()
+
+enemies = load_enemies()
