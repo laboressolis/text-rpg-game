@@ -30,3 +30,9 @@ Embark on an epic journey, face formidable enemies, and shape your destiny.
 - **Enraged Enemies:** Beware, enemies have a chance to get enraged, boosting their stats.
 - **Epik Story:** Immerse yourself in an epic narrative that unfolds as you progress.
 
+## Mistakes I've made throughout this journey.
+
+- **[20:11:2023]:** I messed up the skill system. I completely forgot the fact that I have a class system and different classes will have different skill sets.
+How did I fix it?
+I was to lazy to rework the skill system to add a 'class' id... so I just made different json files for different classes and returned differnet skill tree depending on the player's class.
+
