@@ -1,16 +1,11 @@
 from basic_functions import typing, fasttyping, clear_screen, speechbreak, newline
-from basic_functions import load_enemies, load_items, load_skills
 import time
-from art import main_logo
+from art import start_logo
 
-
-
-# enemies = load_enemies("enemies.txt")
-skills = load_skills
 def start():
     
     clear_screen()
-    print(main_logo)
+    print(start_logo)
     time.sleep(.5)
     typing("You find yourself in the mythical land of Eldoria, a realm shrouded in mystery and danger. \n")
     typing("The once peaceful kingdom is now threatened by the rise of an ancient evil force known as the Shadow Cult. \n")
@@ -28,6 +23,3 @@ def start():
     fasttyping("You follow Oberon to the guild's armory. \n")
     
 
-    # begin character creation
-
-start()
