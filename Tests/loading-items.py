@@ -18,7 +18,10 @@ with open('items.json', 'w') as file:
 
 
 def load_skills():
-    with open('Tests\items.json', 'r') as file:
+    with open('Data\items.json', 'r') as file:
         loaded_items = json.load(file)
         return loaded_items
+    
+x = load_skills()
+print(x)
 

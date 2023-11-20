@@ -39,12 +39,27 @@ with open('skill_tree.json', 'w') as file:
 
  """
 
+skill_tree = {
+    '1': {'id': '1', 'name': 'Fireball', 'attack': 30, 'skillpts': 5},
+    '2': {'id': '2', 'name': 'Ice Shard', 'attack': 25, 'skillpts': 4},
+    '3': {'id': '3', 'name': 'Thunderstrike', 'attack': 35, 'skillpts': 6},
+    '4': {'id': '4', 'name': 'Earthquake', 'attack': 40, 'skillpts': 7},
+    '5': {'id': '5', 'name': 'Wind Cutter', 'attack': 28, 'skillpts': 5},
+    '6': {'id': '6', 'name': 'Aqua Blast', 'attack': 32, 'skillpts': 6},
+    '7': {'id': '7', 'name': 'Lightning Bolt', 'attack': 38, 'skillpts': 8},
+    '8': {'id': '8', 'name': 'Magma Eruption', 'attack': 42, 'skillpts': 9},
+    '9': {'id': '9', 'name': 'Blizzard', 'attack': 27, 'skillpts': 5},
+    '10': {'id': '10', 'name': 'Solar Flare', 'attack': 45, 'skillpts': 10}
+}
+
+with open('Data/magical_skill_tree.json', 'w') as file:
+    json.dump(skill_tree, file, indent=4)
 
 
 # Load the skill tree from the JSON file
-def load_skills():
+""" def load_skills():
     with open('Tests\skill_tree.json', 'r') as file:
         loaded_skill_tree = json.load(file)
-        return loaded_skill_tree
+        return loaded_skill_tree """
 
 
