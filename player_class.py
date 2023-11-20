@@ -1,6 +1,13 @@
-from items import item, health_pot, mana_pot, stamina_pot
-from main import skills
+
 import random
+from basic_functions import load_magical_skills, load_physical_skills
+from basic_functions import load_items
+items = load_items()
+
+health_pot = 'Health Potion(+20)'
+mana_pot = 'Mana Potion(+30)'
+stamina_pot = 'Stamina Potion(+30)'
+
 
 class Player:
     def __init__(self, name, player_class, max_stamina, max_mana, base_attack):
@@ -10,7 +17,12 @@ class Player:
         self.level = 1
         self.skill_points = 0
         self.coin = 0
-        self.equipment = {'weapon': None, 'head': None, 'chest': None, 'pants': None, 'boots': None, 'hands': None}
+        self.equipment = {'weapon': {'id': '1', 'type': 'weapon', 'name': 'Wooden Sword', 'attack': 10, 'defense': 0, 'class': 'physical'}, 
+                          'chest': {'id': '2', 'type': 'chest', 'name': 'Chainmail Chestplate', 'attack': 0, 'defense': 30, 'class': 'physical'}, 
+                          'pants': {'id': '3', 'type': 'pants', 'name': 'Chainmail Pants', 'attack': 0, 'defense': 10, 'class': 'physical'}, 
+                          'boots': {'id': '4', 'type': 'boots', 'name': 'Chainmail Boots', 'attack': 0, 'defense': 5, 'class': 'physical'}, 
+                          'head': {'id': '5', 'type': 'head', 'name': 'Chainmail Helmet', 'attack': 0, 'defense': 15, 'class': 'physical'}, 
+                          'hands': {'id': '6', 'type': 'hands', 'name': 'Chainmail Gloves', 'attack': 5, 'defense': 5, 'class': 'physical'}}
         
         # template {'id': 1, 'name': 'Punch', 'attack': 5}
         self.skills_obtained = {}
@@ -19,6 +31,7 @@ class Player:
 
         # Stats
         self.base_attack = base_attack
+
         self.combined_attack = (self.base_attack + 
                                 self.equipment['weapon']['attack'] + self.equipment['head']['attack'] + 
                                 self.equipment['chest']['attack'] + self.equipment['pants']['attack'] + 
@@ -48,21 +61,24 @@ class Player:
         # How to distinguish b/w weapon and equips?? IDS!!! edit1: switched to it being "type" (weapon/head/chest/pants/boots/hands)
         # NEW TEMPLATE
         # {EQUIPID: {id: value, type: string, name: string, attack: value, defense: value, class: string}}
-        self.equipment_inventory = {'1':{'id': '1', 'type': 'weapon', 'name': 'Excalibur','attack': 50, 'defense': 10, 'class': 'physical'},
-                                    '2':{'id': '2', 'type': 'weapon', 'name': 'idk what to call1','attack': 30, 'defense': 10, 'class': 'physical'},
-                                    '3':{'id': '3', 'type': 'weapon', 'name': 'idk what to call2','attack': 10, 'defense': 10, 'class': 'physical'}
-                                    }
+        self.equipment_inventory = {}
     
-    def is_alive(self):
+    def skill_set(self):
+        if self.player_class == 'physical':
+            return load_physical_skills()
+        else:
+            return load_magical_skills
+
+    def isPlayerAlive(self):
         if self.health > 0:
             return True
         else:
             return False
     
     def passive_regeneration(self):
-        self.health += 20
-        self.mana += 20
-        self.stamina += 20
+        self.health = min(self.health + 20, self.max_health)
+        self.mana = min(self.mana + 20, self.max_mana)
+        self.stamina = min(self.stamina + 20, self.max_stamina)
     
     def add_hp(self, value):
         self.health = min(self.health + value, self.max_health)
@@ -255,6 +271,7 @@ class Player:
             del self.skills_selected[id]
     
     def buy_skill(self):
+        skills = self.skill_set() # Fix [20:11:2023]
         id = input("Enter Skill ID: ")
         not_obtained_skills = {key: value for key, value in skills.items() if key not in self.skills_obtained} 
         
@@ -269,6 +286,7 @@ class Player:
             print("There is no available skill with that skill id.")
 
     def display_all_skills(self):
+        skills = self.skill_set() # Fix [20:11:2023]
         def print_skills(skill_tree, page=1, skills_per_page=10):
             start_index = (page - 1) * skills_per_page
             end_index = start_index + skills_per_page
@@ -295,6 +313,7 @@ class Player:
                 self.buy_skill()
  
     def display_obtained_skills(self):
+        skills = self.skill_set() # Fix [20:11:2023]
         def print_skills(obtained_skills, page=1, skills_per_page=5):
             start_index = (page - 1) * skills_per_page
             end_index = start_index + skills_per_page
@@ -320,6 +339,7 @@ class Player:
 
     def display_selected_skills(self):
         # I know I made a dum move here with the len(self.skills_selected) but eh
+        skills = self.skill_set() # Fix [20:11:2023]
         if len(self.skills_selected) != 0:
             def print_skills(obtained_skills, page=1, skills_per_page=5):
                 start_index = (page - 1) * skills_per_page
@@ -349,26 +369,37 @@ class Player:
         else:
             print("You have no selected skills.")
     
-    def attack(self):
-        probabilities = [0.1, 0.3, 0.4, 0.2]
+    def attack(self,skill):
+        if self.stamina > skill['stamina_cost'] and self.mana > skill['mana_cost']:
+            probabilities = [0.1, 0.3, 0.4, 0.2]
+            total_attack_val = self.combined_attack + skill['attack']
+            range1 = int(0.1 * total_attack_val)
+            range2 = int(0.3 * total_attack_val)+ range1
+            range3 = int(0.4 * total_attack_val) + range2
 
-        range1 = int(0.1 * self.combined_attack)
-        range2 = int(0.3 * self.combined_attack)+ range1
-        range3 = int(0.4 * self.combined_attack) + range2
+            random_number = random.uniform(0, 1)
 
-        random_number = random.uniform(0, 1)
+            if random_number < probabilities[0]:
+                print("Crit!")
+                return self.combined_attack
+            elif random_number < probabilities[1]:
+                return random.randint(range1, self.combined_attack- 1)
+            elif random_number < probabilities[2]:
+                return random.randint(range2, range1- 1)
+            else:
+                return random.randint(0,range3- 1)
+            
+            self.stamina = self.stamina - skill['stamina_cost']
+            self.mana = self.mana - skill['mana_cost']
 
-        if random_number < probabilities[0]:
-            print("Crit!")
-            return self.combined_attack
-        elif random_number < probabilities[1]:
-            return random.randint(range1, self.combined_attack- 1)
-        elif random_number < probabilities[2]:
-            return random.randint(range2, range1- 1)
         else:
-            return random.randint(0,range3- 1)
+            print("You don't have enough Mana or Stamina for it")
+            return 0
+        
+    
         
 
+
     
-#player = Player('icy', 'physical',50,50,50)
+#
 
