@@ -12,3 +12,7 @@ item = {'1':{'id': '1', 'type': 'weapon', 'name': 'Excalibur','attack': 50, 'def
  """
 
 
+import random
+
+x = random.randint(5,2)
+print(x)

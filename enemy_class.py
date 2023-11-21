@@ -27,7 +27,7 @@ class Enemy:
     def add_hp(self, value):
         self.health = min(self.health + value, self.max_health)
     
-    def remove_health(self, value):
+    def remove_hp(self, value):
         self.health = max(self.health - value, 0)
 
     

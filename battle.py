@@ -13,6 +13,14 @@ def battle(enemy, player):
         print('1. Attack')
         print('2. Defend')
         print('3. Flee')
-        x = input()
+        choice = input()
+        while choice not in ['1','2','3']:
+            print("uh oh! Wrong Choice?")
+            choice = input()
+        if choice == '1':
+            damage = player.attack()
+            enemy.remove_hp(damage)
+            print(enemy.health)
 
-battle(random_enemy, player)
+
+# YAY OH MAI GAHHHHHHHH

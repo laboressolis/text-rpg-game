@@ -25,8 +25,15 @@ class Player:
                           'hands': {'id': '6', 'type': 'hands', 'name': 'Chainmail Gloves', 'attack': 5, 'defense': 5, 'class': 'physical'}}
         
         # template {'id': 1, 'name': 'Punch', 'attack': 5}
-        self.skills_obtained = {}
-        self.skills_selected = {}
+        self.skills_obtained = {'1': {'id': '1', 'name': 'Punch', 'attack': 30, 'skillpts': 0, 'stamina_cost': 5, 'mana_cost': 0}, 
+                                '2': {'id': '2', 'name': 'Kick', 'attack': 35, 'skillpts': 0, 'stamina_cost': 6, 'mana_cost': 0}, 
+                                '3': {'id': '3', 'name': 'Slash', 'attack': 40, 'skillpts': 0, 'stamina_cost': 7, 'mana_cost': 0}, 
+                                '4': {'id': '4', 'name': 'Bash', 'attack': 38, 'skillpts': 0, 'stamina_cost': 8, 'mana_cost': 0}
+                                }
+        self.skills_selected = {'1': {'id': '1', 'name': 'Punch', 'attack': 30, 'skillpts': 0, 'stamina_cost': 5, 'mana_cost': 0}, 
+                                '2': {'id': '2', 'name': 'Kick', 'attack': 35, 'skillpts': 0, 'stamina_cost': 6, 'mana_cost': 0}, 
+                                '3': {'id': '3', 'name': 'Slash', 'attack': 40, 'skillpts': 0, 'stamina_cost': 7, 'mana_cost': 0}, 
+                                '4': {'id': '4', 'name': 'Bash', 'attack': 38, 'skillpts': 0, 'stamina_cost': 8, 'mana_cost': 0}}
         self.max_skills = 5
 
         # Stats
@@ -336,6 +343,7 @@ class Player:
                 break
             elif user_input == 's':
                 self.select_skill()
+      
 
     def display_selected_skills(self):
         # I know I made a dum move here with the len(self.skills_selected) but eh
@@ -369,37 +377,44 @@ class Player:
         else:
             print("You have no selected skills.")
     
-    def attack(self,skill):
+    def attack(self):
+        list_skills = list(self.skills_selected.values())
+        keys = list(self.skills_selected.keys())
+        print(f"Mana:{self.mana} | Stamina:{self.stamina}")
+        for tempskill in list_skills:
+            print(f"{tempskill['id']}: {tempskill['name']} (Attack: {tempskill['attack']} | Mana:{tempskill["mana_cost"]} | Stamina:{tempskill["stamina_cost"]})")
+        id = input("Enter Skill ID to attack: ")
+        while id not in keys:
+            print("uh oh! Wrong Skill id?")
+            id = input("Enter Skill ID to attack: ")
+        skill = self.skills_selected[id]
         if self.stamina > skill['stamina_cost'] and self.mana > skill['mana_cost']:
             probabilities = [0.1, 0.3, 0.4, 0.2]
             total_attack_val = self.combined_attack + skill['attack']
             range1 = int(0.1 * total_attack_val)
             range2 = int(0.3 * total_attack_val)+ range1
-            range3 = int(0.4 * total_attack_val) + range2
+            range3 = int(0.4 * total_attack_val) + range2            
+            # Subtracting the stamina and mana cost
+            self.stamina = self.stamina - skill['stamina_cost']
+            self.mana = self.mana - skill['mana_cost']
 
             random_number = random.uniform(0, 1)
 
+            # [21:11:23] It was throwing n 'ValueError: empty range in randrange(37, 9)' error fixed it by making sure the limits are okay.
             if random_number < probabilities[0]:
                 print("Crit!")
                 return self.combined_attack
             elif random_number < probabilities[1]:
-                return random.randint(range1, self.combined_attack- 1)
+                lower_bound = min(range1, self.combined_attack - 1)
+                upper_bound = max(range1, self.combined_attack - 1)
+                return random.randint(lower_bound, upper_bound)
             elif random_number < probabilities[2]:
-                return random.randint(range2, range1- 1)
+                lower_bound = min(range2, range1 - 1)
+                upper_bound = max(range2, range1 - 1)
+                return random.randint(lower_bound, upper_bound)
             else:
                 return random.randint(0,range3- 1)
-            
-            self.stamina = self.stamina - skill['stamina_cost']
-            self.mana = self.mana - skill['mana_cost']
-
         else:
             print("You don't have enough Mana or Stamina for it")
             return 0
         
-    
-        
-
-
-    
-#
-

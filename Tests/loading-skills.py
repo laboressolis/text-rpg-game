@@ -39,7 +39,7 @@ with open('skill_tree.json', 'w') as file:
 
  """
 
-skill_tree = {
+""" skill_tree = {
     '1': {'id': '1', 'name': 'Fireball', 'attack': 30, 'skillpts': 5},
     '2': {'id': '2', 'name': 'Ice Shard', 'attack': 25, 'skillpts': 4},
     '3': {'id': '3', 'name': 'Thunderstrike', 'attack': 35, 'skillpts': 6},
@@ -50,10 +50,9 @@ skill_tree = {
     '8': {'id': '8', 'name': 'Magma Eruption', 'attack': 42, 'skillpts': 9},
     '9': {'id': '9', 'name': 'Blizzard', 'attack': 27, 'skillpts': 5},
     '10': {'id': '10', 'name': 'Solar Flare', 'attack': 45, 'skillpts': 10}
-}
+} """
 
-with open('Data/magical_skill_tree.json', 'w') as file:
-    json.dump(skill_tree, file, indent=4)
+
 
 
 # Load the skill tree from the JSON file
@@ -63,3 +62,19 @@ with open('Data/magical_skill_tree.json', 'w') as file:
         return loaded_skill_tree """
 
 
+
+
+skill_tree = {
+    '1': {'id': '1', 'name': 'Punch', 'attack': 30, 'skillpts': 0, 'stamina_cost': 5, 'mana_cost': 0},
+    '2': {'id': '2', 'name': 'Kick', 'attack': 35, 'skillpts': 0, 'stamina_cost': 6, 'mana_cost': 0},
+    '3': {'id': '3', 'name': 'Slash', 'attack': 40, 'skillpts': 0, 'stamina_cost': 7, 'mana_cost': 0},
+    '4': {'id': '4', 'name': 'Bash', 'attack': 38, 'skillpts': 0, 'stamina_cost': 8, 'mana_cost': 0},
+    '5': {'id': '5', 'name': 'FirePunch', 'attack': 45, 'skillpts': 5, 'stamina_cost': 9, 'mana_cost': 15},
+    '6': {'id': '6', 'name': 'Swipe', 'attack': 32, 'skillpts': 3, 'stamina_cost': 5, 'mana_cost': 0},
+    '7': {'id': '7', 'name': 'Crush', 'attack': 42, 'skillpts': 5, 'stamina_cost': 8, 'mana_cost': 0},
+    '8': {'id': '8', 'name': 'Thrust', 'attack': 36, 'skillpts': 7, 'stamina_cost': 6, 'mana_cost': 0},
+    '9': {'id': '9', 'name': 'Strike', 'attack': 33, 'skillpts': 3, 'stamina_cost': 7, 'mana_cost': 0},
+    '10': {'id': '10', 'name': 'Lunge', 'attack': 39, 'skillpts': 5, 'stamina_cost': 7, 'mana_cost': 0}
+}
+with open('Data/physical_skill_tree.json', 'w') as file:
+    json.dump(skill_tree, file, indent=4)
