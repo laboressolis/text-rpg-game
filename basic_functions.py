@@ -12,6 +12,11 @@ def clear_screen():
     '''Clears The Screen'''
     os.system('cls')
 
+def clear_lines(num_lines):
+    for _ in range(num_lines):
+        print("\033[F\033[K", end="") 
+    sys.stdout.flush()
+
 def typing(message):
     '''Typing Mech'''
     for letter in message:
@@ -24,6 +29,14 @@ def typing(message):
 def fasttyping(message):
     for letter in message:
         time.sleep(random.choice([0.11, 0.01, 0.08, 0.01,0.01, 0.07, 0.06, 0.06, 0.05, 0.01]))
+        sys.stdout.write(letter)
+        sys.stdout.flush()
+    time.sleep(.1)
+    return ''
+
+def reallyfasttyping(message):
+    for letter in message:
+        time.sleep(random.choice([0.01, 0.01, 0.08, 0.001, 0.01, 0.007, 0.06, 0.007, 0.005, 0.01]))
         sys.stdout.write(letter)
         sys.stdout.flush()
     time.sleep(.1)
