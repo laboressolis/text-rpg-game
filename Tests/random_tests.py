@@ -12,7 +12,18 @@ item = {'1':{'id': '1', 'type': 'weapon', 'name': 'Excalibur','attack': 50, 'def
  """
 
 
-import random
+""" import random
 
 x = random.randint(5,2)
-print(x)
+print(x) """
+
+""" import sys
+import time
+
+
+
+def clear_last_lines(num_lines):
+    for _ in range(num_lines):
+        print("\033[F\033[K", end="") 
+    sys.stdout.flush()
+ """
