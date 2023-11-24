@@ -38,5 +38,6 @@ I was to lazy to rework the skill system to add a 'class' id... so I just made d
 - **[21:11:2023]:** Well Well Well...*sign*.. I forgot skills would cost mana or stamina... ￣へ￣
 How did I fix it?
 Added the mana and stamina id to skill data... (I already made the function while accounting for mana and stamina but didnt add it the skill data :/)
+- **[23:11:2023]:** Ran into `ImportError: cannot import name 'Player' from partially initialized module 'player_class' (most likely due to a circular import)`.
 
 
