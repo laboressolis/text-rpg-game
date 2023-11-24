@@ -4,7 +4,7 @@ import json
 import time
 import random
 import msvcrt
-from enemy_class import Enemy
+
 
 
 
@@ -62,6 +62,7 @@ def load_magical_skills():
         return loaded_skill_tree
 
 def load_enemies():
+    from enemy_class import Enemy
     with open(r'Data\enemies.json', 'r') as file:
         loaded_enemies = json.load(file)
         enemies = [Enemy(enemy['name'], enemy['health'], enemy['max_health'],
@@ -79,3 +80,4 @@ def newline():
 items = load_items()
 
 enemies = load_enemies()
+items = load_items()
