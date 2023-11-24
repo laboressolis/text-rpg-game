@@ -70,7 +70,6 @@ def battle(enemy, player):
             fasttyping(f"You regenerated {stamina_inc} defense.\n")
             time.sleep(1.8)
             clear_lines(4)
-
         elif choice == '4':
             fasttyping("You try to flee. \n")
             if player.flee():
@@ -78,10 +77,7 @@ def battle(enemy, player):
                 break
             else:
                 random_number = random.choice([3,4,2,4,5,6,1,7])
-                fasttyping(f"Awww! You tripped an fell and took {random_number} damage.")
+                fasttyping(f"Awww! You tripped an fell and took {random_number} damage.\n")
                 player.health -= random_number
-
-
-
-                
+            clear_lines(3)
 battle(random_enemy,player)
