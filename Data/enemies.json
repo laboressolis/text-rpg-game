@@ -124,5 +124,12 @@
         "max_health": 300,
         "attack": 65,
         "type": "elite"
+    },
+    {
+        "name": "Mother",
+        "health": 1000,
+        "max_health": 1000,
+        "attack": 120,
+        "type": "boss"
     }
 ]
