@@ -1,13 +1,10 @@
 
 import random
-from basic_functions import load_magical_skills, load_physical_skills
-from basic_functions import load_items
-items = load_items()
+import time
 
 health_pot = 'Health Potion(+20)'
 mana_pot = 'Mana Potion(+30)'
 stamina_pot = 'Stamina Potion(+30)'
-
 
 class Player:
     def __init__(self, name, player_class, max_stamina, max_mana, base_attack):
@@ -49,6 +46,8 @@ class Player:
                                 self.equipment['weapon']['defense'] + self.equipment['head']['defense'] + 
                                 self.equipment['chest']['defense'] + self.equipment['pants']['defense'] + 
                                 self.equipment['boots']['defense'] + self.equipment['hands']['defense'])
+        
+        self.defense_dynamic_factor = 0.2
 
         self.max_health = 100
         self.health = self.max_health
@@ -68,9 +67,11 @@ class Player:
         # How to distinguish b/w weapon and equips?? IDS!!! edit1: switched to it being "type" (weapon/head/chest/pants/boots/hands)
         # NEW TEMPLATE
         # {EQUIPID: {id: value, type: string, name: string, attack: value, defense: value, class: string}}
+        # YO FUCK THIS SHTI
         self.equipment_inventory = {}
     
     def skill_set(self):
+        from basic_functions import load_magical_skills, load_physical_skills
         if self.player_class == 'physical':
             return load_physical_skills()
         else:
@@ -344,7 +345,6 @@ class Player:
             elif user_input == 's':
                 self.select_skill()
       
-
     def display_selected_skills(self):
         # I know I made a dum move here with the len(self.skills_selected) but eh
         skills = self.skill_set() # Fix [20:11:2023]
@@ -378,6 +378,7 @@ class Player:
             print("You have no selected skills.")
     
     def attack(self):
+        from basic_functions import reallyfasttyping, clear_lines
         list_skills = list(self.skills_selected.values())
         keys = list(self.skills_selected.keys())
         print(f"Mana:{self.mana} | Stamina:{self.stamina}")
@@ -388,7 +389,7 @@ class Player:
             print("uh oh! Wrong Skill id?")
             id = input("Enter Skill ID to attack: ")
         skill = self.skills_selected[id]
-        if self.stamina > skill['stamina_cost'] and self.mana > skill['mana_cost']:
+        if self.stamina >= skill['stamina_cost'] and self.mana > skill['mana_cost']:
             probabilities = [0.1, 0.3, 0.4, 0.2]
             total_attack_val = self.combined_attack + skill['attack']
             range1 = int(0.1 * total_attack_val)
@@ -402,7 +403,6 @@ class Player:
 
             # [21:11:23] It was throwing n 'ValueError: empty range in randrange(37, 9)' error fixed it by making sure the limits are okay.
             if random_number < probabilities[0]:
-                print("Crit!")
                 return self.combined_attack
             elif random_number < probabilities[1]:
                 lower_bound = min(range1, self.combined_attack - 1)
@@ -415,6 +415,32 @@ class Player:
             else:
                 return random.randint(0,range3- 1)
         else:
-            print("You don't have enough Mana or Stamina for it")
+            reallyfasttyping("You don't have enough Mana or Stamina for it. \n")
+            reallyfasttyping("You deal no damage. \n")
+            time.sleep(0.8)
+            clear_lines(2)
             return 0
         
+    def player_defense(self,attack_val):
+        def calc_effective_defense():
+            # dynamic_multiplier = 1 + dynamic_factor * (current_health / max_health)
+            dynamic_multiplier = 1 + self.defense_dynamic_factor * (self.health / self.max_health)
+            effective_defense = self.combined_defense * dynamic_multiplier
+            return effective_defense
+        effective_defense = calc_effective_defense()
+        reduced_damage = max(0, attack_val - effective_defense)
+        return reduced_damage
+    
+    def flee(self):
+        probabilities = [0.4,0.6]
+
+        random_number = random.uniform(0,1)
+
+        if random_number < probabilities[0]:
+            '''if player escapes then True'''
+            return True
+        else:
+            return False
+        
+    
+    
