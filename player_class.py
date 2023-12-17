@@ -2,6 +2,7 @@
 import random
 import time
 
+
 health_pot = 'Health Potion(+20)'
 mana_pot = 'Mana Potion(+30)'
 stamina_pot = 'Stamina Potion(+30)'
@@ -11,9 +12,9 @@ class Player:
         self.name = name
         self.player_class = player_class
         self.player_subclass = None
-        self.level = 1
+        self.level = 1 #not implemented idk exp systems
         self.skill_points = 0
-        self.coin = 0
+        self.coin = 0 #shops not implemented
         self.equipment = {'weapon': {'id': '1', 'type': 'weapon', 'name': 'Wooden Sword', 'attack': 10, 'defense': 0, 'class': 'physical'}, 
                           'chest': {'id': '2', 'type': 'chest', 'name': 'Chainmail Chestplate', 'attack': 0, 'defense': 30, 'class': 'physical'}, 
                           'pants': {'id': '3', 'type': 'pants', 'name': 'Chainmail Pants', 'attack': 0, 'defense': 10, 'class': 'physical'}, 
@@ -218,16 +219,21 @@ class Player:
                 print("You have 0 Stamina Potions.")
 
     def show_inventory(self):
+        from basic_functions import clear_lines
         ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
+        clear_lines(1)
         while ch not in ['1', '2', '0']:
             print("Wrong choice...")
             ch = input("(1)Potion Inventory | (2)Equipment Inventory | (0)exit: ")
+            clear_lines(2)
         if ch == '1':
             self.display_potion_inventory()
             ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
+            clear_lines(5)
             while ch not in ['1', '2', '3', '0']:
                 print("Wrong choice...")
                 ch = input("(1)Health Potion | (2)Mana Potion | (3)Stamina Potion | (0)Exit: ")
+                clear_lines(2)
             if ch == '0':
                 return
             else:
@@ -422,6 +428,7 @@ class Player:
             return 0
         
     def player_defense(self,attack_val):
+        # mb here
         def calc_effective_defense():
             # dynamic_multiplier = 1 + dynamic_factor * (current_health / max_health)
             dynamic_multiplier = 1 + self.defense_dynamic_factor * (self.health / self.max_health)
