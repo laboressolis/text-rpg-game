@@ -1,3 +1,7 @@
+# EDIT: I'll not be continuing this project anymore... partly because it was just me trying to learn and partly bcuz its messed up.
+
+
+
 # RPG Text Game in Python
 
 This is my first Text Based RPG game in py.
@@ -30,7 +34,7 @@ Embark on an epic journey, face formidable enemies, and shape your destiny.
 - **Enraged Enemies:** Beware, enemies have a chance to get enraged, boosting their stats.
 - **Epik Story:** Immerse yourself in an epic narrative that unfolds as you progress.
 
-## Mistakes I've made throughout this journey.
+## Mistakes.
 
 - **[20:11:2023]:** I messed up the skill system. I completely forgot the fact that I have a class system and different classes will have different skill sets.
 How did I fix it?
