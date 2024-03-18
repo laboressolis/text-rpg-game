@@ -1,5 +1,11 @@
 # EDIT: I'll not be continuing this project anymore... partly because it was just me trying to learn and partly bcuz its messed up.
-https://files.catbox.moe/j9wm0y.sh
+
+
+
+
+
+
+
 
 
 # RPG Text Game in Python
@@ -26,6 +32,7 @@ Embark on an epic journey, face formidable enemies, and shape your destiny.
 
 ## Features
 
+~~
 - **Class System:** Player Classes to enchance your gameplay.
 - **Coin System:** Earn and spend coins to enhance your character.
 - **Skill System:** Customize your abilities using skills from a JSON file (`skills.json`).
@@ -33,15 +40,14 @@ Embark on an epic journey, face formidable enemies, and shape your destiny.
 - **Item Drops:** Collect loot from defeated enemies.
 - **Enraged Enemies:** Beware, enemies have a chance to get enraged, boosting their stats.
 - **Epik Story:** Immerse yourself in an epic narrative that unfolds as you progress.
+~~
 
 ## Mistakes.
 
-- **[20:11:2023]:** I messed up the skill system. I completely forgot the fact that I have a class system and different classes will have different skill sets.
-How did I fix it?
-I was to lazy to rework the skill system to add a 'class' id... so I just made different json files for different classes and returned differnet skill tree depending on the player's class.
-- **[21:11:2023]:** Well Well Well...*sign*.. I forgot skills would cost mana or stamina... ￣へ￣
-How did I fix it?
-Added the mana and stamina id to skill data... (I already made the function while accounting for mana and stamina but didnt add it the skill data :/)
+- **[20:11:2023]:**I completely forgot the fact that I have a class system and different classes will have different skill sets.
+> too lazy to rework the skill system to add a 'class' id... so I just made different json files for different classes and returned differnet skill tree depending on the player's class.
+- **[21:11:2023]:** forgot skills would cost mana or stamina... ￣へ￣
+> Added the mana and stamina id to skill data... (I already made the function while accounting for mana and stamina but didnt add it the to skill data :/)
 - **[23:11:2023]:** Ran into `ImportError: cannot import name 'Player' from partially initialized module 'player_class' (most likely due to a circular import)`.
 
 
